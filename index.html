@@ -906,7 +906,7 @@
                 <li><strong>Passes</strong> k = 4<sup>max(0, ENOB<sub>req</sub> &minus; ENOB)</sup>, with ENOB<sub>req</sub> = 11 for BF16, 8 for INT8, 7 for FP8: averaging k passes buys &frac12; log<sub>2</sub> k bits (<a href="https://arxiv.org/abs/2102.06365">Garg et al.</a>). Intensity detection doubles k. Not FHE's digit planes: they do not help float workloads (<a href="https://brendanjameslynskey.github.io/FOptInf_01_Fourier_Optics_for_Engineers/">deck 01</a>).</li>
                 <li><strong>Conversions</strong> = pairs per token &times; tokens &times; k, at 10<sup>12</sup> samples/s.</li>
                 <li><strong>Mask rewrites</strong> = &lceil;filter spectra needed / 2&nbsp;M&rceil;, at 1,031 Hz (an 8-bit DMD, <a href="https://arxiv.org/abs/2008.05853">Miscuglio et al., Optica 2020</a>).</li>
-                <li>Step = digital part (matmuls, on its own roofline, DVFS and TDP) <strong>+</strong> optical time (or the max, if overlapped).</li>
+                <li>Step = digital part (matmuls, on its own <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/#g-roofline">roofline</a>, DVFS and TDP) <strong>+</strong> optical time (or the max, if overlapped).</li>
             </ul>
         </div>
         <div class="diagram-panel accent-border">
