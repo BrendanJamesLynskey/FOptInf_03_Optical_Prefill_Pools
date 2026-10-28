@@ -1,6 +1,6 @@
 # Fourier Optics for Inference 03 — Optical Prefill Pools: Simulated Results
 
-Disaggregated_Inference_Sim extended with heterogeneous pools, FFT-mixing models and an optical transform device: TTFT, TPOT, goodput, joules per token and PPA against all-GPU baselines, the break-even point, the KV link options, and compressing the KV hand-off in transit, with the simulator live in the browser.
+The serving simulator (Optical_Serving_Sim) extended with heterogeneous pools, FFT-mixing models and an optical transform device: TTFT, TPOT, goodput, joules per token and PPA against all-GPU baselines, the break-even point, the KV link options, and compressing the KV hand-off in transit, with the simulator live in the browser.
 
 Topics: Heterogeneous pools, Transform device, Break-even, PPA, Compute in transit, Live simulator.
 

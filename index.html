@@ -872,7 +872,7 @@ html[data-concept=optbench] .callout,html[data-concept=optbench] .diagram-grid,h
 <!-- deck-concept:end -->
     <div class="series-label">Fourier Optics for Inference &mdash; Presentation 03</div>
     <h1>Optical <span class="accent">Prefill Pools</span>: Simulated Results</h1>
-    <p class="subtitle">Disaggregated_Inference_Sim extended with heterogeneous pools, FFT-mixing models and an optical transform device: TTFT, TPOT, goodput, joules per token and PPA against all-GPU baselines, the break-even point, the KV link options, and compressing the KV hand-off in transit, with the simulator live in the browser.</p>
+    <p class="subtitle">The serving simulator (Optical_Serving_Sim) extended with heterogeneous pools, FFT-mixing models and an optical transform device: TTFT, TPOT, goodput, joules per token and PPA against all-GPU baselines, the break-even point, the KV link options, and compressing the KV hand-off in transit, with the simulator live in the browser.</p>
 
     <div class="tags">
         <span class="tag">Heterogeneous pools</span>
@@ -926,7 +926,7 @@ html[data-concept=optbench] .callout,html[data-concept=optbench] .diagram-grid,h
 <section class="slide" id="slide-01">
     <div class="slide-number">01</div>
     <h2>The Question, and the Short Answer</h2>
-    <p>Deck 02 found by counting FLOPs that a Fourier-optical engine has little to do in LLM inference: 0.20% of a Hyena-2 model's prefill FLOPs at 2,048 tokens, and a large share only when the weights themselves are block-circulant, which is speculative at this scale. This deck runs the full serving system: a disaggregated cluster in <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim">Disaggregated_Inference_Sim</a>, with an optical transform device in the prefill pool, against all-GPU baselines on the same request stream.</p>
+    <p>Deck 02 found by counting FLOPs that a Fourier-optical engine has little to do in LLM inference: 0.20% of a Hyena-2 model's prefill FLOPs at 2,048 tokens, and a large share only when the weights themselves are block-circulant, which is speculative at this scale. This deck runs the full serving system: a disaggregated cluster in <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim">Optical_Serving_Sim</a>, with an optical transform device in the prefill pool, against all-GPU baselines on the same request stream.</p>
     <div class="diagram-grid cols-2">
         <div class="diagram-panel accent-border">
             <h4>What the simulator says</h4>
@@ -939,7 +939,7 @@ html[data-concept=optbench] .callout,html[data-concept=optbench] .diagram-grid,h
         <div class="diagram-panel accent-border">
             <h4>How to read the numbers</h4>
             <ul>
-                <li>Every number comes from <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">examples/results.md</a>, sections 10&ndash;15, written by <code>examples/results.py</code>.</li>
+                <li>Every number comes from <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">examples/results.md</a>, sections 10&ndash;15, written by <code>examples/results.py</code>.</li>
                 <li>Workload: a Llama-3-8B-shaped model, one device per instance, one prefill and one decode instance, Poisson arrivals at 8 req/s, 800 requests, 2,048-token prompts and 256-token outputs (cv 0.5), SLOs TTFT 1 s and TPOT 25 ms.</li>
                 <li>Optical coefficients are <strong>illustrative</strong>; the block-circulant LLM is <strong>speculative</strong>; the hardware mapping is this series' speculation, attributed to no company.</li>
             </ul>
@@ -990,7 +990,7 @@ html[data-concept=optbench] .callout,html[data-concept=optbench] .diagram-grid,h
             </ul>
         </div>
     </div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/src/disagg_sim/hardware.py">hardware.py</a> (<code>TransformEngine</code>, <code>CostModel.optical_terms</code>). Every coefficient on this slide is illustrative.</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/src/disagg_sim/hardware.py">hardware.py</a> (<code>TransformEngine</code>, <code>CostModel.optical_terms</code>). Every coefficient on this slide is illustrative.</p>
 </section>
 
 <section class="slide" id="slide-04">
@@ -1006,7 +1006,7 @@ html[data-concept=optbench] .callout,html[data-concept=optbench] .diagram-grid,h
 <tr><td>A100 prefill + A100 decode</td><td>47.1 s</td><td>13.8 ms</td><td>0.0%</td><td>0.401</td><td>1,894</td></tr>
 <tr><td>2x A100 prefill + H100 decode</td><td>1,093.5 ms</td><td>8.9 ms</td><td>96.9%</td><td>0.412</td><td>1,859</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;10. Heterogeneous&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;10. Heterogeneous&rdquo;</p>
     <ul>
         <li>Setting <code>--prefill-device h100 --decode-device h100</code> explicitly reproduces the <code>--device h100</code> run bit-identically (every request's timestamps and every summary number): True.</li>
         <li>An A100 decode pool costs TPOT but still meets the 25 ms SLO here, at lower J/token. An A100 prefill pool alone cannot keep up with 8 req/s (SLO 0.0%); two of them nearly can (96.9%).</li>
@@ -1028,7 +1028,7 @@ html[data-concept=optbench] .callout,html[data-concept=optbench] .diagram-grid,h
 <tr><td>optical-fft prefill (defaults) + H100 decode</td><td>172.0 s</td><td>12.5 ms</td><td>0.0%</td><td>0.660</td><td>100.0%</td></tr>
 <tr><td>optical-fft prefill (optimistic) + H100 decode</td><td>372.8 ms</td><td>114.4 ms</td><td>0.0%</td><td>0.383</td><td>0.0%</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;11. All-GPU&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;11. All-GPU&rdquo;</p>
     <p><strong>Hyena-2 + circulant 256, last-token head</strong></p>
     <div class="table-wrap"><table>
 <thead><tr><th>Configuration</th><th>TTFT p99</th><th>TPOT p99</th><th>SLO met</th><th>J / token</th><th>Prefill optical-bound</th></tr></thead>
@@ -1039,7 +1039,7 @@ html[data-concept=optbench] .callout,html[data-concept=optbench] .diagram-grid,h
 <tr><td>optical-fft prefill (defaults) + H100 decode</td><td>322.1 s</td><td>3.2 ms</td><td>0.0%</td><td>0.568</td><td>100.0%</td></tr>
 <tr><td>optical-fft prefill (optimistic) + H100 decode</td><td>90.5 ms</td><td>13.5 ms</td><td>100.0%</td><td>0.194</td><td>100.0%</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;11. All-GPU&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;11. All-GPU&rdquo;</p>
     <ul>
         <li><strong>Defaults collapse.</strong> 64 averaging passes (BF16 at ENOB 8) and hundreds of mask rewrites at 1,031 Hz per step (slide 07) make every prefill step hundreds of milliseconds: the queue never drains.</li>
         <li><strong>Hyena's TPOT on GPUs is the real problem</strong>, and optics does not touch it: its direct-decode cache is 4&times; the GQA KV cache, so decode is slower than attention's. A distilled recurrence fixes it (section 11, &ldquo;distilled decode&rdquo;).</li>
@@ -1050,7 +1050,7 @@ html[data-concept=optbench] .callout,html[data-concept=optbench] .diagram-grid,h
 <section class="slide" id="slide-06">
     <div class="slide-number">06</div>
     <h2>Interactive: The Simulator, Live</h2>
-    <p>The simulator itself, inlined from <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/web/sim_engine.js">web/sim_engine.js</a> (bit-exact with the Python package, tested), running the same 800 requests results.md used. The defaults reproduce section 11's circulant last-token row with the optimistic engine. Every control is a real simulator input; the coefficients are illustrative.</p>
+    <p>The simulator itself, inlined from <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/web/sim_engine.js">web/sim_engine.js</a> (bit-exact with the Python package, tested), running the same 800 requests results.md used. The defaults reproduce section 11's circulant last-token row with the optimistic engine. Every control is a real simulator input; the coefficients are illustrative.</p>
     <div class="control-panel">
         <div class="sim-grid">
             <div class="control-row"><label for="sim-model">Model (Llama-3-8B shape)</label><select id="sim-model">
@@ -1778,7 +1778,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>circulant 256, last-token head</td><td>84.5%</td><td>2.12 ms</td><td>11.23 ms</td><td>553.5 ms</td><td>18.78 ms</td></tr>
 <tr><td>circulant 64, last-token head</td><td>77.9%</td><td>2.76 ms</td><td>27.95 ms</td><td>575.8 ms</td><td>19.93 ms</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;12. Sweeps&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;12. Sweeps&rdquo;</p>
     <p><strong>Mask rate</strong> (circulant 256, last-token head, ENOB 11, overlapped):</p>
     <div class="table-wrap"><table>
 <thead><tr><th>Mask rate</th><th>Rewrites per step</th><th>Mask time</th><th>Step time</th><th>TTFT p99 (full run)</th><th>SLO met</th></tr></thead>
@@ -1789,7 +1789,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>100,000 Hz</td><td>277</td><td>2.77 ms</td><td>7.70 ms</td><td>26.7 ms</td><td>100.0%</td></tr>
 <tr><td>1,000,000 Hz</td><td>277</td><td>0.28 ms</td><td>5.21 ms</td><td>16.5 ms</td><td>100.0%</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;12. Sweeps&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;12. Sweeps&rdquo;</p>
     <ul>
         <li>The circulant variant's forward pass needs 552,456,192 filter-spectrum values on a 2-million-value mask: <strong>277 rewrites per step</strong>, whatever the batch. At today's 8-bit DMD rate that alone is longer than the whole GPU prefill.</li>
         <li>The GPU's own prefill of the circulant variant is tiny (a few milliseconds) <em>if</em> its FFTs run at the matmul rate. That assumption, not the optics, decides most of the comparison.</li>
@@ -1813,7 +1813,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>13</td><td>1</td><td>245.76</td><td>18.78 ms</td><td>1.089 J</td></tr>
 <tr><td>14</td><td>1</td><td>491.52</td><td>18.78 ms</td><td>2.177 J</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;12. Sweeps&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;12. Sweeps&rdquo;</p>
     <p><strong>Lasers and thermal tuning</strong>, charged for the whole run (optimistic engine, full runs):</p>
     <div class="table-wrap"><table>
 <thead><tr><th>Lasers + tuning</th><th>J / token</th><th>Optical static share</th><th>Conversion share</th><th>TTFT p99</th></tr></thead>
@@ -1825,7 +1825,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>100 W</td><td>0.236</td><td>22.0%</td><td>0.4%</td><td>90.5 ms</td></tr>
 <tr><td>200 W</td><td>0.287</td><td>36.1%</td><td>0.4%</td><td>90.5 ms</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;12. Sweeps&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;12. Sweeps&rdquo;</p>
     <p class="src">For comparison, all-GPU 1P1D: 0.185 J/token with GPU FFTs at the matmul rate, 0.210 at 1/16 (section 13).</p>
 </section>
 
@@ -1840,7 +1840,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>GPU FFT at 1/4</td><td>10.4 ms</td><td>90.5 ms</td><td>never</td></tr>
 <tr><td>GPU FFT at 1/16</td><td>40.0 ms</td><td>90.5 ms</td><td>47,942 Hz</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;13. Break-even&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;13. Break-even&rdquo;</p>
     <div class="table-wrap"><table>
 <thead><tr><th>GPU baseline</th><th>GPU J/token</th><th>Optical J/token</th><th>Static power at equal J/token</th></tr></thead>
 <tbody>
@@ -1848,7 +1848,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>GPU FFT at 1/4</td><td>0.190</td><td>0.195</td><td>10.5 W</td></tr>
 <tr><td>GPU FFT at 1/16</td><td>0.210</td><td>0.196</td><td>46.9 W</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;13. Break-even&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;13. Break-even&rdquo;</p>
     <ul>
         <li>GPU FFT efficiency below which the optimistic optical pool wins TTFT p99: 0.032 (1/30.9).</li>
         <li><strong>Energy</strong>: the optical pool's J/token matches the GPU's only if the lasers and tuning stay below the static power in the table: a few watts against GPUs that run FFTs well, tens of watts against GPUs that do not.</li>
@@ -1867,7 +1867,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>A100-SXM</td><td>826</td><td>0</td><td>826</td><td>$348</td></tr>
 <tr><td>Optical-FFT + H100-class</td><td>817</td><td>100</td><td>917</td><td>$357</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;10. Heterogeneous&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;10. Heterogeneous&rdquo;</p>
     <p>Throughput per dollar of silicon, from section 11 (circulant 256, last-token head):</p>
     <div class="table-wrap"><table>
 <thead><tr><th>Configuration</th><th>SLO met</th><th>tok/J</th><th>tok/s per $1000</th></tr></thead>
@@ -1878,7 +1878,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>optical-fft prefill (defaults) + H100 decode</td><td>0.0%</td><td>1.76</td><td>689</td></tr>
 <tr><td>optical-fft prefill (optimistic) + H100 decode</td><td>100.0%</td><td>5.15</td><td>2,772</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;11. All-GPU&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;11. All-GPU&rdquo;</p>
     <ul>
         <li>The engine adds about 100 mm&sup2; and about 5% of silicon cost per prefill device (a separate, small photonic die yields well); that is small next to the latency and static-power verdicts.</li>
         <li>perf/W here is tokens per joule of the whole cluster, static power included, so it ranks configurations by energy alone.</li>
@@ -1898,7 +1898,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>eth-100g</td><td>100 GbE</td><td>12.5</td><td>20</td><td>15</td></tr>
 <tr><td>eth-25g</td><td>25 GbE</td><td>3.1</td><td>20</td><td>15</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;14. The KV hand-off&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;14. The KV hand-off&rdquo;</p>
     <p><strong>Hyena direct cache</strong> (the biggest hand-off):</p>
     <div class="table-wrap"><table>
 <thead><tr><th>Link</th><th>KV wait + transfer share of E2E</th><th>Link busy</th><th>TPOT p99</th><th>SLO met</th><th>Link J / request</th></tr></thead>
@@ -1909,7 +1909,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>eth-100g</td><td>1.5%</td><td>55.1%</td><td>115.2 ms</td><td>0.0%</td><td>0.129</td></tr>
 <tr><td>eth-25g</td><td>97.2%</td><td>98.4%</td><td>1,338 ms</td><td>0.0%</td><td>0.129</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;14. The KV hand-off&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;14. The KV hand-off&rdquo;</p>
     <ul>
         <li>On 25 GbE the 1.07 GB hand-off saturates the link; on every faster link the hand-off is a few percent of end-to-end time or less.</li>
         <li>The choice of what to hand off moves more than the choice of link: a distilled state is under 1% of end-to-end time even on 25 GbE (section 14).</li>
@@ -1957,7 +1957,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>GQA KV cache</td><td>eth-25g</td><td>12 req/s</td><td>fp8</td><td>2,959.0 ms</td><td>163.7 ms</td><td>163.7 ms</td></tr>
 <tr><td>GQA KV cache</td><td>eth-25g</td><td>14 req/s</td><td>fp8</td><td>9,657.8 ms</td><td>166.6 ms</td><td>166.6 ms</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;15. Compute in the transport&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;15. Compute in the transport&rdquo;</p>
     <div class="table-wrap"><table>
 <thead><tr><th>Hand-off</th><th>Load</th><th>SLO uncompressed</th><th>SLO in transit</th><th>SLO at GPU</th></tr></thead>
 <tbody>
@@ -1966,7 +1966,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <tr><td>GQA KV cache</td><td>12 req/s</td><td>98.3%</td><td>100.0%</td><td>100.0%</td></tr>
 <tr><td>GQA KV cache</td><td>14 req/s</td><td>41.0%</td><td>100.0%</td><td>100.0%</td></tr>
 </tbody></table></div>
-    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Disaggregated_Inference_Sim/blob/main/examples/results.md">results.md</a>, section &ldquo;15. Compute in the transport&rdquo;</p>
+    <p class="src">Source: <a href="https://github.com/BrendanJamesLynskey/Optical_Serving_Sim/blob/38c655e/examples/results.md">results.md</a>, section &ldquo;15. Compute in the transport&rdquo;</p>
     <ul>
         <li><strong>Where the link is the bottleneck, compression helps a lot, wherever it is done.</strong> GQA KV over 25 GbE at 14 req/s: hand-off p99 9,657.8 ms uncompressed, 166.6 ms with fp8 in transit, 166.6 ms at the GPU; SLO met 41.0% against 100.0%.</li>
         <li><strong>The GPU does it nearly free.</strong> An elementwise pass over the KV (read it, write half of it) is short next to a prefill step, so in-transit and at-GPU hand-off latencies match for fp8, and J/token is the same to three decimals. The in-transit stage saves GPU time, not latency.</li>
@@ -2020,7 +2020,7 @@ window.FOP_WORKLOADS = {"8":[[0.01803638301368865,1236,204],[0.2123597420424336,
 <!-- ════════════════════════════════════ Footer ════════════════════════════════════ -->
 <footer class="footer">
     <p>Part of the <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_Fourier_Optics_Inference">Fourier Optics for Inference series</a> &middot; <a href="https://brendanjameslynskey.github.io/LLM_Hub_Fourier_Optics_Inference/#glossary">glossary: every concept and where it is explained</a> &middot; numbers: <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_Fourier_Optics_Inference/blob/main/analysis/results.md">analysis/results.md</a></p>
-    <p style="margin-top: 0.5rem; font-size: 0.8rem;"><a href="https://brendanjameslynskey.github.io/FOptInf_02_Transforms_in_Inference_Workloads/">&larr; 02 Transforms in Inference Workloads</a></p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;"><a href="https://brendanjameslynskey.github.io/FOptInf_02_Transforms_in_Inference_Workloads/">&larr; 02 Transforms in Inference Workloads</a> &nbsp;&middot;&nbsp; <a href="https://brendanjameslynskey.github.io/FOptInf_04_Inside_a_Photonic_Link/">04 Inside a Photonic Link &rarr;</a></p>
     <p style="margin-top: 0.5rem; font-size: 0.8rem;">Sister series: <a href="https://brendanjameslynskey.github.io/LLM_Hub_Inference_Simulators/">LLM Inference Simulators</a> &middot; <a href="https://brendanjameslynskey.github.io/FHE_Hub_Accelerator_Simulators/">FHE Accelerator Simulators</a> &middot; <a href="https://brendanjameslynskey.github.io/SimEng_Hub_Toolkit/">Simulation Engineering Toolkit</a></p>
 </footer>
 
